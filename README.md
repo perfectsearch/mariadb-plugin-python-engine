@@ -11,6 +11,7 @@ I put the driver code in the storage folder.
 
 mariadb-5.5.42/storage/python/
 
+```sh
 # https://mariadb.com/kb/en/mariadb/source-building-mariadb-on-centos/
 
 yum install jemalloc-devel
@@ -36,4 +37,4 @@ create database python;
 use python;
 create table `test` (`id` int, `data` text) ENGINE=PYTHON DEFAULT CHARSET=latin1 comment="Pass information to python engine.";
 select * from `test`
-
+```
