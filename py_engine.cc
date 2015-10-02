@@ -262,25 +262,17 @@ static int python_init_func(void *p)
   python_hton->field_options= python_field_option_list;
 
   // Start up python
-
-  // We need to load the shared python library here
-  // TODO make this work with other Python versions
-  // http://www.gossamer-threads.com/lists/python/bugs/696386
-  // dlopen("libpython3.6.so", RTLD_LAZY | RTLD_GLOBAL); 
-
-  //lets see if we can mess around with python
   if (! Py_IsInitialized())
   {
     FILE* python_script_file;
     Py_SetProgramName("python_engine");  /* optional but recommended */
     Py_Initialize();
     PyEval_InitThreads(); // Yes, we need multi-thread support
-    //PyRun_SimpleString("from time import time,ctime\n"
-    //                 "print 'Today is',ctime(time())\n");
-    //
+
     Py_InitModule("engine_table", EmbMethods);
     python_script_file = fopen(python_script, "r");
     PyRun_SimpleFile(python_script_file, python_script);
+
     // Get a reference to the main module
     // and global dictionary
     pMain = PyImport_AddModule("__main__");
@@ -306,7 +298,6 @@ static int python_done_func(void *p)
 
   // Shutdown python
   Py_Finalize();
-
   // We don't release the GIL when after Py_Finalize()
 
   DBUG_RETURN(error);
